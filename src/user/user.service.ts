@@ -1,15 +1,17 @@
-import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'database/user.entity';
+import { User } from 'src/database/user.entity';
 import { Repository } from 'typeorm';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly useRepository: Repository<User>,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -18,6 +20,7 @@ export class UserService {
   }
 
   findAll() {
+    this.logger.log('findAll');
     return this.useRepository.find();
   }
 

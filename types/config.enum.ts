@@ -5,3 +5,8 @@ export enum ConfigEnum {
   DATA_PASSWORD = 'DATA_PASSWORD',
   DATA_BASE = 'DATA_BASE',
 }
+
+export enum LogsEnum {
+  LOG_ON = 'LOG_ON',
+  LOG_LEVEL = 'LOG_LEVEL',
+}

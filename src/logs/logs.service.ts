@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLogDto } from './dto/create-log.dto';
 import { UpdateLogDto } from './dto/update-log.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Logs } from 'database/logs.entity';
+import { Logs } from 'src/database/logs.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
