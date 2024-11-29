@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsModule } from './logs/logs.module';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { connectionParams } from 'ormconfig';
 import { TypeORMErrorFilter } from './common/filters/database-exception.filter';
@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { RolesModule } from './roles/roles.module';
 import jwtConstants from './utils/jwtConstants';
 import { AuthGuard } from './common/guard/auth.guard';
+import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -50,6 +51,10 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
   ],
   exports: [Logger],
