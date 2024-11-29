@@ -1,11 +1,13 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY } from 'src/common/decorator/public.decorator';
 import jwtConstants from 'src/utils/jwtConstants';
 
@@ -35,7 +37,10 @@ export class AuthGuard implements CanActivate {
         secret: jwtConstants.secret,
       });
       request['user'] = payload;
-    } catch {
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        throw new HttpException('token过期', HttpStatus.UNAUTHORIZED); // 处理过期的 token
+      }
       throw new UnauthorizedException();
     }
     return true;

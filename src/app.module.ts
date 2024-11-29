@@ -13,6 +13,7 @@ import { RolesModule } from './roles/roles.module';
 import jwtConstants from './utils/jwtConstants';
 import { AuthGuard } from './common/guard/auth.guard';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { RolesGuard } from './common/guard/roles.guard';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -55,6 +56,10 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   exports: [Logger],

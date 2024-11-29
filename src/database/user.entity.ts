@@ -10,6 +10,7 @@ import {
 import { Logs } from './logs.entity';
 import { Roles } from './roles.entity';
 import { Profile } from './profile.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -20,6 +21,7 @@ export class User {
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @OneToOne(() => Profile, (profile) => profile.user, {
