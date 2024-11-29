@@ -24,7 +24,7 @@ export class Logs {
   @Column()
   result: number;
 
-  @ManyToOne(() => User, (user) => user.logs)
+  @ManyToOne(() => User, (user) => user.logs, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 }

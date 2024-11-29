@@ -16,16 +16,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()
   password: string;
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: true,
+  })
   profile: Profile;
 
-  @OneToMany(() => Logs, (logs) => logs.user)
+  @OneToMany(() => Logs, (logs) => logs.user, {
+    cascade: true,
+  })
   logs: Logs[];
 
   @ManyToMany(() => Roles, (roles) => roles.users)

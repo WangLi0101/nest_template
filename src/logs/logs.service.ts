@@ -27,7 +27,7 @@ export class LogsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} log`;
+    return this.logsRepository.delete(id);
   }
 
   groupByUser(userId: number) {

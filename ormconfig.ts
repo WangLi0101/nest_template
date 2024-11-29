@@ -14,7 +14,6 @@ const getEnvConfig = (): Record<string, any> => {
   return { ...env.parsed, ...envConfig.parsed };
 };
 
-// 通过环境变量获取不同的配置
 const buildConnectionParams = () => {
   const config = getEnvConfig();
   return {

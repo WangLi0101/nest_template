@@ -21,7 +21,9 @@ export class Profile {
   @Column()
   address: string;
 
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, (user) => user.profile, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   user: User;
 }

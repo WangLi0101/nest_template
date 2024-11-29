@@ -10,22 +10,21 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/database/user.entity';
-import { Repository } from 'typeorm';
+import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
+import { Public } from 'src/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Post('/page')
+  findAll(@Body() pageDto: PageDto) {
+    return this.userService.findAll(pageDto);
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
   }
 
   @Get(':id')
@@ -41,5 +40,17 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+
+  @Public()
+  @Post('/login')
+  login(@Body() loginDto: LoginDto) {
+    console.log('loginDto', loginDto);
+    return this.userService.login(loginDto);
+  }
+
+  @Post('/update-password')
+  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.userService.updatePassword(updatePasswordDto);
   }
 }
