@@ -22,6 +22,7 @@ export class UserController {
     return this.userService.findAll(pageDto);
   }
 
+  @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);

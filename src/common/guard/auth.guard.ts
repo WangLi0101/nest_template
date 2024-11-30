@@ -4,7 +4,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
@@ -31,7 +30,7 @@ export class AuthGuard implements CanActivate {
     if (isPublic) return true;
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new HttpException('无权限', HttpStatus.FORBIDDEN);
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
@@ -41,7 +40,7 @@ export class AuthGuard implements CanActivate {
       if (error instanceof TokenExpiredError) {
         throw new HttpException('token过期', HttpStatus.UNAUTHORIZED); // 处理过期的 token
       }
-      throw new UnauthorizedException();
+      throw new HttpException('无权限', HttpStatus.FORBIDDEN);
     }
     return true;
   }

@@ -1,5 +1,6 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -14,14 +15,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: HttpException | BadRequestException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
     const status = exception.getStatus();
     let message = '';
 
-    if ((exception.getResponse() as any).message) {
+    if (exception instanceof BadRequestException) {
       message = (exception.getResponse() as any).message.toString();
     } else {
       message = exception.message;
