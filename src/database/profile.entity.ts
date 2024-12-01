@@ -16,10 +16,10 @@ export class Profile {
   gender: number;
 
   @Column()
-  photo: string;
+  avatar: string;
 
   @Column()
-  address: string;
+  email: string;
 
   @OneToOne(() => User, (user) => user.profile, {
     onDelete: 'CASCADE',
