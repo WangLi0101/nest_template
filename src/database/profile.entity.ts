@@ -15,10 +15,12 @@ export class Profile {
   @Column()
   gender: number;
 
-  @Column()
+  @Column({
+    default: '',
+  })
   avatar: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @OneToOne(() => User, (user) => user.profile, {

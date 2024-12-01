@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: '用户名不能为空' })
@@ -14,9 +21,11 @@ export class CreateUserDto {
   gender: number;
 
   @IsString({ message: '头像格式不正确' })
-  photo: string;
+  @IsOptional()
+  @Transform(({ value }) => value || '') // 默认值为 '默认名称'
+  avatar: string;
 
-  @IsNotEmpty({ message: '地址不能为空' })
-  @IsString({ message: '地址格式不正确' })
-  address: string;
+  @IsNotEmpty({ message: '邮箱不能为空' })
+  @IsEmail({}, { message: '邮箱格式不正确' })
+  email: string;
 }

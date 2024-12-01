@@ -15,6 +15,7 @@ import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { BcryptService } from './bcrypt.service';
 import { Profile } from 'src/database/profile.entity';
+import { TokenPayload } from 'types';
 
 @Injectable()
 export class UserService {
@@ -111,5 +112,15 @@ export class UserService {
     if (!isMatch) throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
 
     return this.jwtService.sign({ id: user.id, roles: user.roles });
+  }
+
+  async getMyInfo(payload: TokenPayload) {
+    return this.useRepository.findOne({
+      where: { id: payload.id },
+      relations: {
+        profile: true,
+        roles: true,
+      },
+    });
   }
 }

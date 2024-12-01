@@ -12,6 +12,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
 import { Public } from 'src/common/decorator/public.decorator';
+import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
+import { TokenPayload } from 'types';
 
 @Controller('user')
 export class UserController {
@@ -25,6 +27,8 @@ export class UserController {
   @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
+    console.log('createUserDto', createUserDto);
+
     return this.userService.create(createUserDto);
   }
 
@@ -53,5 +57,12 @@ export class UserController {
   @Post('/update-password')
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.userService.updatePassword(updatePasswordDto);
+  }
+
+  @Get('/my/info')
+  getMyInfo(@JwtPayload() payload: TokenPayload) {
+    console.log('payload', payload);
+
+    return this.userService.getMyInfo(payload);
   }
 }
