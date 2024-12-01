@@ -1,5 +1,5 @@
 # 使用 Node.js 官方镜像作为基础镜像
-FROM node:18
+FROM node:20
 
 # 安装 pnpm
 RUN npm install -g pnpm
