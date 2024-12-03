@@ -1,5 +1,5 @@
 import { PickType } from '@nestjs/mapped-types';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
 
 export class PageDto {
@@ -9,9 +9,8 @@ export class PageDto {
   @IsInt()
   pageSize: number;
 
+  @IsString()
   username: string;
-
-  roles: number[];
 }
 
 export class LoginDto {

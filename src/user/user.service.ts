@@ -9,7 +9,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -49,7 +49,7 @@ export class UserService {
       skip: (pageDto.page - 1) * pageDto.pageSize,
       take: pageDto.pageSize,
       where: {
-        username: pageDto.username,
+        username: Like(`%${pageDto.username}%`),
       },
     });
     return {
