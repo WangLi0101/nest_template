@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   Inject,
   LoggerService,
+  HttpStatus,
 } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { QueryFailedError, TypeORMError } from 'typeorm';
@@ -14,30 +15,63 @@ export class TypeORMErrorFilter implements ExceptionFilter {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
-  private getMessage(exception: QueryFailedError<any>) {
-    let msg = '';
-    switch (exception.driverError.errno) {
-      case 1062:
-        msg = '唯一索引冲突';
-        break;
-      default:
-        msg = exception.driverError.message;
+
+  // 获取错误消息
+  private getMessage(exception: TypeORMError): string {
+    if (exception instanceof QueryFailedError) {
+      const driverError = exception.driverError;
+      if (driverError && driverError.errno) {
+        switch (driverError.errno) {
+          case 1062:
+            return '唯一索引冲突'; // 唯一索引冲突
+          // 可根据需要添加更多的错误码处理
+          default:
+            return driverError.message || '数据库查询失败';
+        }
+      }
+      return '数据库查询失败';
     }
-    return msg;
+    // 处理其他类型的 TypeORMError
+    return exception.message || '数据库错误';
   }
-  catch(exception: QueryFailedError<any>, host: ArgumentsHost) {
+
+  // 获取 HTTP 状态码
+  private getStatusCode(exception: TypeORMError): number {
+    if (exception instanceof QueryFailedError) {
+      const driverError = exception.driverError;
+      if (driverError && driverError.errno === 1062) {
+        return HttpStatus.CONFLICT; // 409 冲突
+      }
+      return HttpStatus.BAD_REQUEST; // 400 请求错误
+    }
+    // 其他 TypeORMError 返回 500 内部服务器错误
+    return HttpStatus.INTERNAL_SERVER_ERROR;
+  }
+
+  catch(exception: TypeORMError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-    const status = 400;
+
+    const message = this.getMessage(exception);
+    const status = this.getStatusCode(exception);
+
     const responseData = {
       code: status,
       path: request.url,
       method: request.method,
       timestamp: new Date().toISOString(),
-      message: this.getMessage(exception),
+      message,
     };
-    this.logger.error(responseData);
+
+    // 记录详细的错误日志，包括堆栈信息
+    this.logger.error({
+      message: 'TypeORMError',
+      error: responseData,
+      stack: exception.stack,
+      body: request.body,
+    });
+
     response.status(status).json(responseData);
   }
 }

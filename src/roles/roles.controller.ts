@@ -6,11 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { AssignRoleDto } from './dto/role.dto';
+import { AssignMenuDto, AssignRoleDto } from './dto/role.dto';
 
 @Controller('role')
 export class RolesController {
@@ -44,5 +45,15 @@ export class RolesController {
   @Post('/assignRole')
   assignRole(@Body() assignRoleDto: AssignRoleDto) {
     return this.rolesService.assignRole(assignRoleDto);
+  }
+
+  @Post('/assignMenu')
+  assignMenu(@Body() assignMenuDto: AssignMenuDto) {
+    return this.rolesService.assignMenu(assignMenuDto);
+  }
+
+  @Get('/getMenu/:roldId')
+  getMenu(@Query('roleId') roleId: number) {
+    return this.rolesService.getMenu(+roleId);
   }
 }
