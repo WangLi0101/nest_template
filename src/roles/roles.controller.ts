@@ -52,8 +52,8 @@ export class RolesController {
     return this.rolesService.assignMenu(assignMenuDto);
   }
 
-  @Get('/getMenu/:roldId')
-  getMenu(@Query('roleId') roleId: number) {
+  @Get('/getMenu/:roleId')
+  getMenu(@Param('roleId') roleId: number) {
     return this.rolesService.getMenu(+roleId);
   }
 }
