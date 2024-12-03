@@ -62,10 +62,17 @@ export class RolesService {
     const role = await this.rolesRepository.findOne({
       where: { id: roleId },
       relations: {
-        menus: true,
+        menus: {
+          parent: true,
+        },
       },
     });
     if (!role) throw new HttpException('角色不存在', HttpStatus.BAD_REQUEST);
-    return role.menus;
+    return role.menus.map((menu) => {
+      return {
+        ...menu,
+        parentId: menu.parent ? menu.parent.id : null,
+      };
+    });
   }
 }
