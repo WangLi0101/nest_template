@@ -1,7 +1,6 @@
-export type TokenRoles = { id: number; name: string }[];
 export interface TokenPayload {
   id: number;
-  roles: TokenRoles;
+  roles: string[];
   iat: number;
   exp: number;
 }

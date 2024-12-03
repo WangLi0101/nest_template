@@ -8,14 +8,12 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { Roles } from '../decorator/roles.decorator';
-import { TokenRoles } from 'types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-  private matchRoles(roles: string[], userRoles: TokenRoles) {
-    const userRolesNameList = userRoles.map((el) => el.name);
-    return roles.some((el) => userRolesNameList.includes(el));
+  private matchRoles(roles: string[], userRoles: string[]) {
+    return roles.some((el) => userRoles.includes(el));
   }
   canActivate(
     context: ExecutionContext,

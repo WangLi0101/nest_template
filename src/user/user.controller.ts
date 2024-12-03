@@ -10,7 +10,12 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
+import {
+  LoginDto,
+  PageDto,
+  UpdateMyPasswordDto,
+  UpdatePasswordDto,
+} from './dto/user.dto';
 import { Public } from 'src/common/decorator/public.decorator';
 import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
 import { TokenPayload } from 'types';
@@ -50,19 +55,27 @@ export class UserController {
   @Public()
   @Post('/login')
   login(@Body() loginDto: LoginDto) {
-    console.log('loginDto', loginDto);
     return this.userService.login(loginDto);
   }
 
-  @Post('/update-password')
+  @Post('/updatePassword')
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.userService.updatePassword(updatePasswordDto);
   }
 
+  @Post('/update/my/password')
+  updateMyPassword(
+    @Body() updatePasswordDto: UpdateMyPasswordDto,
+    @JwtPayload() payload: TokenPayload,
+  ) {
+    return this.userService.updatePassword({
+      id: payload.id,
+      ...updatePasswordDto,
+    });
+  }
+
   @Get('/my/info')
   getMyInfo(@JwtPayload() payload: TokenPayload) {
-    console.log('payload', payload);
-
     return this.userService.getMyInfo(payload);
   }
 }

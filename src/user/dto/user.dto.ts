@@ -25,7 +25,8 @@ export class LoginDto {
 export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {
   @IsInt()
   id: number;
-
-  @IsNotEmpty({ message: '旧密码不能为空' })
-  oldPassword: string;
 }
+
+export class UpdateMyPasswordDto extends PickType(CreateUserDto, [
+  'password',
+]) {}

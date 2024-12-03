@@ -74,14 +74,9 @@ export class UserService {
   }
 
   async updatePassword(update: UpdatePasswordDto) {
-    const { id, oldPassword, password } = update;
+    const { id, password } = update;
     const user = await this.useRepository.findOneBy({ id });
     if (!user) throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
-    const isMatch = await this.bcryptService.compareHash(
-      oldPassword,
-      user.password,
-    );
-    if (!isMatch) throw new HttpException('旧密码错误', HttpStatus.BAD_REQUEST);
     const hashPassword = await this.bcryptService.generateHash(password);
     return this.useRepository.update(id, { password: hashPassword });
   }
@@ -111,7 +106,10 @@ export class UserService {
     );
     if (!isMatch) throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
 
-    return this.jwtService.sign({ id: user.id, roles: user.roles });
+    return this.jwtService.sign({
+      id: user.id,
+      roles: user.roles.map((el) => el.key),
+    });
   }
 
   async getMyInfo(payload: TokenPayload) {
