@@ -8,14 +8,14 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/database/user.entity';
 import { Like, Repository } from 'typeorm';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { LoginDto, PageDto, UpdatePasswordDto } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { BcryptService } from './bcrypt.service';
-import { Profile } from 'src/database/profile.entity';
 import { TokenPayload } from 'types';
+import { User } from './entities/user.entity';
+import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class UserService {

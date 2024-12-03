@@ -1,11 +1,12 @@
-import { Logs } from 'src/database/logs.entity';
-import { Profile } from 'src/database/profile.entity';
-import { Roles } from 'src/database/roles.entity';
-import { User } from 'src/database/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { ConfigEnum } from 'types/config.enum';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Profile } from 'src/user/entities/profile.entity';
+import { Logs } from 'src/logs/entities/logs.entity';
+import { Roles } from 'src/roles/entities/roles.entity';
+import { Menu } from 'src/menu/entities/menu.entity';
 
 const getEnvConfig = (): Record<string, any> => {
   const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -23,7 +24,7 @@ const buildConnectionParams = () => {
     username: config[ConfigEnum.DATA_USERNAME],
     password: config[ConfigEnum.DATA_PASSWORD],
     database: config[ConfigEnum.DATA_BASE],
-    entities: [User, Profile, Roles, Logs],
+    entities: [User, Profile, Roles, Logs, Menu],
     synchronize: true,
     logging: ['error'],
   } as TypeOrmModuleOptions;

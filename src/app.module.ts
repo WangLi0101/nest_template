@@ -14,6 +14,7 @@ import jwtConstants from './utils/jwtConstants';
 import { AuthGuard } from './common/guard/auth.guard';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { RolesGuard } from './common/guard/roles.guard';
+import { MenuModule } from './menu/menu.module';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -35,6 +36,7 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
     UserModule,
     LogsModule,
     RolesModule,
+    MenuModule,
   ],
   controllers: [],
   providers: [

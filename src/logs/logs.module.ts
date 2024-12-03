@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { LogsService } from './logs.service';
 import { LogsController } from './logs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Logs } from 'src/database/logs.entity';
 import { utilities, WinstonModule } from 'nest-winston';
 import { ConfigService } from '@nestjs/config';
 import { Console } from 'winston/lib/winston/transports';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogsEnum } from 'types/config.enum';
+import { Logs } from './entities/logs.entity';
 
 @Module({
   imports: [
