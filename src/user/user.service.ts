@@ -16,6 +16,9 @@ import { BcryptService } from './bcrypt.service';
 import { TokenPayload } from 'types';
 import { User } from './entities/user.entity';
 import { Profile } from './entities/profile.entity';
+import { CaptchaService } from './captcha.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
@@ -27,6 +30,8 @@ export class UserService {
     private readonly logger: LoggerService,
     private readonly bcryptService: BcryptService,
     private readonly jwtService: JwtService,
+    private readonly captchaService: CaptchaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -90,7 +95,17 @@ export class UserService {
   }
 
   async login(loginDto: LoginDto) {
-    const { username, password } = loginDto;
+    const { username, password, code, codeId } = loginDto;
+    const codeText = await this.cacheManager.get<string>(codeId);
+
+    if (!codeText) {
+      throw new HttpException('验证码过期', HttpStatus.BAD_REQUEST);
+    }
+
+    if (code.toLocaleLowerCase() !== codeText.toLocaleLowerCase()) {
+      throw new HttpException('验证码错误', HttpStatus.BAD_REQUEST);
+    }
+
     const user = await this.useRepository.findOne({
       where: { username },
       relations: {
@@ -120,5 +135,10 @@ export class UserService {
         roles: true,
       },
     });
+  }
+
+  async getCode() {
+    const res = await this.captchaService.createCode();
+    return res;
   }
 }

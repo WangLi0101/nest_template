@@ -19,6 +19,12 @@ export class LoginDto {
 
   @IsNotEmpty({ message: '密码不能为空' })
   password: string;
+
+  @IsNotEmpty({ message: '验证码不能为空' })
+  code: string;
+
+  @IsNotEmpty({ message: '验证码不能为空' })
+  codeId: string;
 }
 
 export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {

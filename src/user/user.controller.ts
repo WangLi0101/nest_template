@@ -37,11 +37,6 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
@@ -77,5 +72,11 @@ export class UserController {
   @Get('/my/info')
   getMyInfo(@JwtPayload() payload: TokenPayload) {
     return this.userService.getMyInfo(payload);
+  }
+
+  @Public()
+  @Get('/code')
+  getCode() {
+    return this.userService.getCode();
   }
 }

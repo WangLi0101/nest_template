@@ -10,3 +10,9 @@ export enum LogsEnum {
   LOG_ON = 'LOG_ON',
   LOG_LEVEL = 'LOG_LEVEL',
 }
+
+export enum RedisEnum {
+  REDIS_HOST = 'REDIS_HOST',
+  REDIS_PORT = 'REDIS_PORT',
+  REDIS_PASSWORD = 'REDIS_PASSWORD',
+}

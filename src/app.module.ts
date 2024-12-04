@@ -1,6 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LogsModule } from './logs/logs.module';
@@ -15,6 +15,9 @@ import { AuthGuard } from './common/guard/auth.guard';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { RolesGuard } from './common/guard/roles.guard';
 import { MenuModule } from './menu/menu.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisEnum } from 'types/config.enum';
+import { redisStore } from 'cache-manager-redis-store';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -31,13 +34,31 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '7d' },
+      signOptions: { expiresIn: '3d' },
+    }),
+    //redis缓存
+    CacheModule.registerAsync({
+      isGlobal: true,
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          store: await redisStore({
+            socket: {
+              host: configService.get(RedisEnum.REDIS_HOST),
+              port: configService.get(RedisEnum.REDIS_PORT),
+            },
+            password: configService.get(RedisEnum.REDIS_PASSWORD),
+            ttl: 60,
+          }),
+        } as any;
+      },
     }),
     UserModule,
     LogsModule,
     RolesModule,
     MenuModule,
   ],
+
   controllers: [],
   providers: [
     Logger,
