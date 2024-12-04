@@ -6,13 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { AssignMenuDto, AssignRoleDto } from './dto/role.dto';
-
+import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
+import { TokenPayload } from 'types';
 @Controller('role')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
@@ -52,8 +52,13 @@ export class RolesController {
     return this.rolesService.assignMenu(assignMenuDto);
   }
 
-  @Get('/getMenu/:roleId')
+  @Get('/menu/:roleId')
   getMenu(@Param('roleId') roleId: number) {
     return this.rolesService.getMenu(+roleId);
+  }
+
+  @Get('/my/menu')
+  getMyMenu(@JwtPayload() payload: TokenPayload) {
+    return this.rolesService.getMyMenu(payload);
   }
 }

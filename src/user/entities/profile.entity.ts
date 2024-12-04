@@ -13,10 +13,13 @@ export class Profile {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   gender: number;
 
   @Column({
-    default: '',
+    default: null,
   })
   avatar: string;
 

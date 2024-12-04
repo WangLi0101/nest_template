@@ -13,6 +13,10 @@ export class CreateMenuDto {
 
   @IsString()
   @IsNotEmpty()
+  component: string;
+
+  @IsString()
+  @IsNotEmpty()
   path: string;
 
   @IsString()

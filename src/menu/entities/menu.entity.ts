@@ -28,6 +28,9 @@ export class Menu {
   @Column({ default: 0 })
   sort: number;
 
+  @Column({ default: '' })
+  component: string;
+
   @ManyToOne(() => Menu, (menu) => menu.children, {
     onDelete: 'CASCADE',
   })

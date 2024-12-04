@@ -21,7 +21,7 @@ export class User {
   username: string;
 
   @Column()
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   @OneToOne(() => Profile, (profile) => profile.user, {

@@ -7,6 +7,7 @@ import { In, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Roles } from './entities/roles.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
+import { TokenPayload } from 'types';
 
 @Injectable()
 export class RolesService {
@@ -74,5 +75,28 @@ export class RolesService {
         parentId: menu.parent ? menu.parent.id : null,
       };
     });
+  }
+
+  async getMyMenu(payload: TokenPayload) {
+    const { roles } = payload;
+    const rolesRes = await this.rolesRepository
+      .createQueryBuilder('role')
+      .leftJoinAndSelect('role.menus', 'menu')
+      .leftJoinAndSelect('menu.children', 'children')
+      .leftJoinAndSelect('menu.parent', 'parent')
+      .where('role.key IN (:...roles)', { roles })
+      .orderBy('menu.sort', 'ASC')
+      .addOrderBy('children.sort', 'ASC')
+      .getMany();
+    const map = new Map();
+    rolesRes.forEach((role) => {
+      role.menus.forEach((menu) => {
+        const { parent, ...list } = menu;
+        if (!parent) {
+          map.set(menu.id, { ...list, parentId: null });
+        }
+      });
+    });
+    return Array.from(map.values());
   }
 }
