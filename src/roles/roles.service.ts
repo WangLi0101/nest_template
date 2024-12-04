@@ -82,19 +82,15 @@ export class RolesService {
     const rolesRes = await this.rolesRepository
       .createQueryBuilder('role')
       .leftJoinAndSelect('role.menus', 'menu')
-      .leftJoinAndSelect('menu.children', 'children')
       .leftJoinAndSelect('menu.parent', 'parent')
       .where('role.key IN (:...roles)', { roles })
       .orderBy('menu.sort', 'ASC')
-      .addOrderBy('children.sort', 'ASC')
       .getMany();
     const map = new Map();
-    rolesRes.forEach((role) => {
-      role.menus.forEach((menu) => {
+    rolesRes.forEach((el) => {
+      el.menus.forEach((menu) => {
         const { parent, ...list } = menu;
-        if (!parent) {
-          map.set(menu.id, { ...list, parentId: null });
-        }
+        map.set(menu.id, { ...list, parentId: parent?.id });
       });
     });
     return Array.from(map.values());
