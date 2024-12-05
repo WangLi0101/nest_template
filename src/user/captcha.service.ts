@@ -1,8 +1,8 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import * as svgCaptcha from 'svg-captcha';
 import { UuidService } from './uuid.service';
+import { Cache } from 'types';
 @Injectable()
 export class CaptchaService {
   private readonly config = {
@@ -13,7 +13,6 @@ export class CaptchaService {
     height: 40,
     // background: '#cc9966', // 背景颜色
     // 可以配置中文验证码
-    // charPreset: '测试验证码'
   };
 
   constructor(
@@ -24,7 +23,7 @@ export class CaptchaService {
   async createCode() {
     const captcha = svgCaptcha.create(this.config);
     const codeId = this.uuidService.createUuid();
-    await this.cacheManager.set(codeId, captcha.text, 10);
+    await this.cacheManager.set(codeId, captcha.text, { ttl: 10 }, '');
     return { codeId, code: captcha.data };
   }
 }

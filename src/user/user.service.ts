@@ -19,6 +19,7 @@ import { Profile } from './entities/profile.entity';
 import { CaptchaService } from './captcha.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { Roles } from 'src/roles/entities/roles.entity';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,8 @@ export class UserService {
     @InjectRepository(User) private readonly useRepository: Repository<User>,
     @InjectRepository(Profile)
     private readonly profileRepository: Repository<Profile>,
+    @InjectRepository(Roles)
+    private readonly roleRepository: Repository<Roles>,
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
     private readonly bcryptService: BcryptService,
@@ -37,10 +40,13 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const { username, password, ...profile } = createUserDto;
     const hashPassword = await this.bcryptService.generateHash(password);
+    const role = await this.roleRepository.findOneBy({ key: 'SYS_COOMON' });
+    if (!role) throw new HttpException('角色不存在', HttpStatus.BAD_REQUEST);
     const userTemp = this.useRepository.create({
       username,
       password: hashPassword,
       profile,
+      roles: [role],
     });
     return this.useRepository.save(userTemp);
   }

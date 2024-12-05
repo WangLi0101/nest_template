@@ -7,9 +7,10 @@ import { User } from './entities/user.entity';
 import { Profile } from './entities/profile.entity';
 import { CaptchaService } from './captcha.service';
 import { UuidService } from './uuid.service';
+import { Roles } from 'src/roles/entities/roles.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Profile])],
+  imports: [TypeOrmModule.forFeature([User, Profile, Roles])],
   controllers: [UserController],
   providers: [UserService, BcryptService, CaptchaService, UuidService],
 })
