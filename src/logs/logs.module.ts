@@ -9,6 +9,7 @@ import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogsEnum } from 'types/config.enum';
 import { Logs } from './entities/logs.entity';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -23,9 +24,10 @@ import { Logs } from './entities/logs.entity';
             utilities.format.nestLike(),
           ),
         });
+        const logs = path.join(__dirname, '../logFile');
         const warnFileTransports = new DailyRotateFile({
           level: 'warn',
-          dirname: 'logs',
+          dirname: logs,
           filename: 'warn-%DATE%.log',
           datePattern: 'YYYY-MM-DD',
           zippedArchive: true,
@@ -39,7 +41,7 @@ import { Logs } from './entities/logs.entity';
 
         const errorFileTransports = new DailyRotateFile({
           level: 'error',
-          dirname: 'logs',
+          dirname: logs,
           filename: 'error-%DATE%.log',
           datePattern: 'YYYY-MM-DD',
           zippedArchive: true,

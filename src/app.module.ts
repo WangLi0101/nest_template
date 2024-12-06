@@ -18,6 +18,8 @@ import { MenuModule } from './menu/menu.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisEnum } from 'types/config.enum';
 import { redisStore } from 'cache-manager-redis-store';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './tasks/tasks.module';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -53,6 +55,9 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
         } as any;
       },
     }),
+    // 定时任务
+    ScheduleModule.forRoot(),
+    TasksModule,
     UserModule,
     LogsModule,
     RolesModule,

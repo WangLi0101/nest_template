@@ -1,5 +1,5 @@
-# 使用 Node.js 官方镜像作为基础镜像
-FROM node:20
+# 构建阶段
+FROM node:20 AS builder
 
 # 安装 pnpm
 RUN npm install -g pnpm
@@ -19,6 +19,21 @@ COPY . .
 # 构建 NestJS 项目
 RUN pnpm run build
 
+# 生产阶段
+FROM node:20-slim
+
+WORKDIR /usr/src/app
+
+# 安装 pnpm
+RUN npm install -g pnpm
+
+# 只复制生产环境必需的文件
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
+
+# 从构建阶段复制构建产物
+COPY --from=builder /usr/src/app/dist ./dist
+
 # 设置环境变量
 ENV NODE_ENV=production
 
@@ -26,4 +41,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # 启动应用程序
-CMD ["pnpm", "run", "start:prod"]
+CMD ["node", "dist/main"]
