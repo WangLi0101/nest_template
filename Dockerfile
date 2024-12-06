@@ -29,6 +29,7 @@ RUN npm install -g pnpm
 
 # 只复制生产环境必需的文件
 COPY package.json pnpm-lock.yaml .env .env.production .env.development ./
+RUN pnpm install --prod --frozen-lockfile
 
 # 从构建阶段复制构建产物
 COPY --from=builder /usr/src/app/dist ./dist
