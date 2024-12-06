@@ -19,11 +19,9 @@ import {
 import { Public } from 'src/common/decorator/public.decorator';
 import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
 import { TokenPayload } from 'types';
-
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @Post('/page')
   findAll(@Body() pageDto: PageDto) {
     return this.userService.findAll(pageDto);
