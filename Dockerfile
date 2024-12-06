@@ -34,6 +34,10 @@ RUN pnpm install --prod --frozen-lockfile
 # 从构建阶段复制构建产物
 COPY --from=builder /usr/src/app/dist ./dist
 
+# 复制环境变量文件
+COPY .env.production ./
+COPY .env.development ./
+
 # 设置环境变量
 ENV NODE_ENV=production
 
