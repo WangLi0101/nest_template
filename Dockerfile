@@ -41,4 +41,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # 启动应用程序
-CMD ["node", "dist/main"]
+CMD ["pnpm", "run", "start:prod"]
