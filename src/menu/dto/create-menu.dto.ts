@@ -12,7 +12,7 @@ export class CreateMenuDto {
   title: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   component: string;
 
   @IsString()

@@ -7,6 +7,8 @@ import { Profile } from 'src/user/entities/profile.entity';
 import { Logs } from 'src/logs/entities/logs.entity';
 import { Roles } from 'src/roles/entities/roles.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
+import { Tag } from 'src/tags/entities/tag.entity';
+import { Blog } from 'src/blog/entities/blog.entity';
 
 const getEnvConfig = (): Record<string, any> => {
   const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -24,7 +26,7 @@ const buildConnectionParams = () => {
     username: config[ConfigEnum.DATA_USERNAME],
     password: config[ConfigEnum.DATA_PASSWORD],
     database: config[ConfigEnum.DATA_BASE],
-    entities: [User, Profile, Roles, Logs, Menu],
+    entities: [User, Profile, Roles, Logs, Menu, Tag, Blog],
     synchronize: true,
     logging: ['error'],
   } as TypeOrmModuleOptions;

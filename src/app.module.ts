@@ -20,6 +20,8 @@ import { RedisEnum } from 'types/config.enum';
 import { redisStore } from 'cache-manager-redis-store';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
+import { TagsModule } from './tags/tags.module';
+import { BlogModule } from './blog/blog.module';
 const envFilePath = `.env.${process.env.NODE_ENV || 'development'}`;
 console.log('currentEnv', envFilePath, process.env.NODE_ENV);
 
@@ -62,6 +64,8 @@ console.log('currentEnv', envFilePath, process.env.NODE_ENV);
     LogsModule,
     RolesModule,
     MenuModule,
+    TagsModule,
+    BlogModule,
   ],
 
   controllers: [],

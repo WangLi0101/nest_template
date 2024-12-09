@@ -11,6 +11,7 @@ import { Profile } from './profile.entity';
 import { Exclude } from 'class-transformer';
 import { Logs } from 'src/logs/entities/logs.entity';
 import { Roles } from 'src/roles/entities/roles.entity';
+import { Blog } from 'src/blog/entities/blog.entity';
 
 @Entity()
 export class User {
@@ -37,4 +38,9 @@ export class User {
   @ManyToMany(() => Roles, (roles) => roles.users)
   @JoinTable()
   roles: Roles[];
+
+  @OneToMany(() => Blog, (blog) => blog.user, {
+    cascade: true,
+  })
+  blogs: Blog[];
 }
