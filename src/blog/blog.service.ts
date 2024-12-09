@@ -39,7 +39,7 @@ export class BlogService {
     const { page, pageSize, title } = query;
     const skip = (page - 1) * pageSize;
     const take = pageSize;
-    const [total, list] = await this.blogRepository.findAndCount({
+    const [list, total] = await this.blogRepository.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },

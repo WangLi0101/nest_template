@@ -13,10 +13,14 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
 import { TokenPayload } from 'types';
 import { QueryBlogDto } from './dto/blog.dto';
+import { AlyService } from 'src/common/service/aly.service';
 
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly alyService: AlyService,
+  ) {}
 
   @Post()
   create(
@@ -44,5 +48,10 @@ export class BlogController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.blogService.remove(+id);
+  }
+
+  @Get('oss/sign')
+  getOss() {
+    return this.alyService.getTemporaryAuthorization();
   }
 }

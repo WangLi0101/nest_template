@@ -23,7 +23,7 @@ export class CaptchaService {
   async createCode() {
     const captcha = svgCaptcha.create(this.config);
     const codeId = this.uuidService.createUuid();
-    await this.cacheManager.set(codeId, captcha.text, { ttl: 10 }, '');
+    await this.cacheManager.set(codeId, captcha.text, { ttl: 20 }, '');
     return { codeId, code: captcha.data };
   }
 }
