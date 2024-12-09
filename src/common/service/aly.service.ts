@@ -19,7 +19,7 @@ export class AlyService {
   // 获取临时授权
   async getTemporaryAuthorization() {
     const policy = {
-      expiration: new Date(Date.now() + 3600 * 1000).toISOString(),
+      expiration: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
       conditions: [
         ['content-length-range', 0, 1048576000],
         { bucket: this.ossClient.options.bucket },
