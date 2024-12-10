@@ -6,21 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
 import { TokenPayload } from 'types';
 import { QueryBlogDto } from './dto/blog.dto';
-import { AlyService } from 'src/common/service/aly.service';
+import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
+import { TransformUrlInterceptor } from 'src/common/interceptor/transformUrl.interceptor';
 
 @Controller('blog')
 export class BlogController {
-  constructor(
-    private readonly blogService: BlogService,
-    private readonly alyService: AlyService,
-  ) {}
+  constructor(private readonly blogService: BlogService) {}
 
   @Post()
   create(
@@ -31,11 +29,13 @@ export class BlogController {
   }
 
   @Post('list')
+  @UseInterceptors(TransformUrlInterceptor)
   findAll(@Body() query: QueryBlogDto) {
     return this.blogService.findAll(query);
   }
 
   @Get(':id')
+  @UseInterceptors(TransformUrlInterceptor)
   findOne(@Param('id') id: string) {
     return this.blogService.findOne(+id);
   }
@@ -48,10 +48,5 @@ export class BlogController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.blogService.remove(+id);
-  }
-
-  @Get('oss/sign')
-  getOss() {
-    return this.alyService.getTemporaryAuthorization();
   }
 }

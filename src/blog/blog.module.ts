@@ -6,11 +6,15 @@ import { Tag } from 'src/tags/entities/tag.entity';
 import { User } from 'src/user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
-import { AlyService } from 'src/common/service/aly.service';
+import { SystemModule } from 'src/system/system.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Blog, Tag, User]), UserModule],
+  imports: [
+    TypeOrmModule.forFeature([Blog, Tag, User]),
+    UserModule,
+    SystemModule,
+  ],
   controllers: [BlogController],
-  providers: [BlogService, AlyService],
+  providers: [BlogService],
 })
 export class BlogModule {}

@@ -20,4 +20,6 @@ export enum RedisEnum {
 export enum OSSEnum {
   OSS_ACCESS_KEY_ID = 'OSS_ACCESS_KEY_ID',
   OSS_ACCESS_KEY_SECRET = 'OSS_ACCESS_KEY_SECRET',
+  OSS_REGION = 'OSS_REGION',
+  OSS_BUCKET = 'OSS_BUCKET',
 }
