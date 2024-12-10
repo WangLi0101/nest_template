@@ -15,6 +15,7 @@ import { TokenPayload } from 'types';
 import { QueryBlogDto } from './dto/blog.dto';
 import { JwtPayload } from 'src/common/decorator/jwtPayload.decorator';
 import { TransformUrlInterceptor } from 'src/common/interceptor/transformUrl.interceptor';
+import { Public } from 'src/common/decorator/public.decorator';
 
 @Controller('blog')
 export class BlogController {
@@ -28,12 +29,14 @@ export class BlogController {
     return this.blogService.create(createBlogDto, JwtPayload);
   }
 
+  @Public()
   @Post('list')
   @UseInterceptors(TransformUrlInterceptor)
   findAll(@Body() query: QueryBlogDto) {
     return this.blogService.findAll(query);
   }
 
+  @Public()
   @Get(':id')
   @UseInterceptors(TransformUrlInterceptor)
   findOne(@Param('id') id: string) {
