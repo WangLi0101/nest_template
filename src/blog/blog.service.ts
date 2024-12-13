@@ -36,19 +36,27 @@ export class BlogService {
   }
 
   async findAll(query: QueryBlogDto) {
-    const { page, pageSize, title } = query;
+    const { page, pageSize, title, tagId } = query;
     const skip = (page - 1) * pageSize;
     const take = pageSize;
+    const allColumns = this.blogRepository.metadata.columns
+      .map((column) => column.propertyName as keyof Blog)
+      .filter((el) => el !== 'content');
     const [list, total] = await this.blogRepository.findAndCount({
+      select: allColumns,
       where: {
         title: Like(`%${title}%`),
+        ...(tagId && { tags: { id: tagId } }),
       },
-      skip,
-      take,
       relations: {
         user: true,
         tags: true,
       },
+      order: {
+        createdAt: 'DESC',
+      },
+      skip,
+      take,
     });
     return {
       total,

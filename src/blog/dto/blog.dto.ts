@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class QueryBlogDto {
   @IsNumber()
@@ -9,4 +9,8 @@ export class QueryBlogDto {
 
   @IsString()
   title: string;
+
+  @IsOptional()
+  @IsNumber()
+  tagId: number | null;
 }
