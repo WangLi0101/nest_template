@@ -33,7 +33,7 @@ export class AlyService {
     return {
       host: `https://${this.ossClient.options.bucket}.${this.ossClient.options.region}.aliyuncs.com`,
       accessId: this.ossClient.options.accessKeyId,
-      policy: formData.Policy,
+      policy: formData.policy,
       signature: formData.Signature,
       expire: Math.floor(expiration.getTime() / 1000), // 转换为秒级时间戳
     };
