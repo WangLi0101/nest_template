@@ -41,6 +41,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "ioredis": "^5.4.1",
+    "livekit-server-sdk": "^2.9.4",
     "mysql2": "^3.11.4",
     "nest-winston": "^1.9.7",
     "reflect-metadata": "^0.1.13",

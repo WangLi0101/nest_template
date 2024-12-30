@@ -23,3 +23,8 @@ export enum OSSEnum {
   OSS_REGION = 'OSS_REGION',
   OSS_BUCKET = 'OSS_BUCKET',
 }
+
+export enum LivekitEnum {
+  LIVEKIT_API_KEY = 'LIVEKIT_API_KEY',
+  LIVEKIT_SECRET_KEY = 'LIVEKIT_SECRET_KEY',
+}
