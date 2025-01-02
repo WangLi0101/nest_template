@@ -27,4 +27,5 @@ export enum OSSEnum {
 export enum LivekitEnum {
   LIVEKIT_API_KEY = 'LIVEKIT_API_KEY',
   LIVEKIT_SECRET_KEY = 'LIVEKIT_SECRET_KEY',
+  LIVEKIT_HOST = 'LIVEKIT_HOST',
 }
